@@ -1,0 +1,103 @@
+Fund Ticker,Security Identifier,Holding Ticker,Shares/Par Value,MarketValue,Weight,Name,Class of Shares,Sector,Date
+QQQ,037833100,AAPL ,"140,707,272","18,556,475,031.36",12.349,Apple Inc,Common Stock,Information Technology,12/22/2020
+QQQ,594918104,MSFT ,"62,570,841","14,012,114,133.54",9.325,Microsoft Corp,Common Stock,Information Technology,12/22/2020
+QQQ,023135106,AMZN ,"4,152,512","13,315,112,778.24",8.861,Amazon.com Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,88160R101,TSLA ,"9,708,235","6,216,571,199.90",4.137,Tesla Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,30303M102,FB ,"19,895,307","5,313,837,546.63",3.536,Facebook Inc,Common Stock,Communication Services,12/22/2020
+QQQ,02079K107,GOOG ,"2,729,975","4,705,111,912.50",3.131,Alphabet Inc,Common Stock,Communication Services,12/22/2020
+QQQ,02079K305,GOOGL ,"2,488,118","4,280,110,345.96",2.848,Alphabet Inc,Common Stock,Communication Services,12/22/2020
+QQQ,67066G104,NVDA ,"7,795,545","4,140,447,815.85",2.755,NVIDIA Corp,Common Stock,Information Technology,12/22/2020
+QQQ,70450Y103,PYPL ,"14,756,020","3,592,943,309.80",2.391,PayPal Holdings Inc,Common Stock,Information Technology,12/22/2020
+QQQ,00724F101,ADBE ,"6,041,456","3,045,920,871.52",2.027,Adobe Inc,Common Stock,Information Technology,12/22/2020
+QQQ,64110L106,NFLX ,"5,563,860","2,933,990,293.80",1.952,Netflix Inc,Common Stock,Communication Services,12/22/2020
+QQQ,20030N101,CMCSA ,"57,501,678","2,876,233,933.56",1.914,Comcast Corp,Common Stock,Communication Services,12/22/2020
+QQQ,713448108,PEP ,"17,404,056","2,506,532,145.12",1.668,PepsiCo Inc,Common Stock,Consumer Staples,12/22/2020
+QQQ,458140100,INTC ,"51,609,317","2,382,802,165.89",1.586,Intel Corp,Common Stock,Information Technology,12/22/2020
+QQQ,17275R102,CSCO ,"53,215,232","2,378,188,718.08",1.583,Cisco Systems Inc,Common Stock,Information Technology,12/22/2020
+QQQ,11135F101,AVGO ,"5,094,210","2,206,302,351.00",1.468,Broadcom Inc,Common Stock,Information Technology,12/22/2020
+QQQ,747525103,QCOM ,"14,243,594","2,084,407,545.96",1.387,QUALCOMM Inc,Common Stock,Information Technology,12/22/2020
+QQQ,872590104,TMUS ,"15,631,216","2,067,228,316.00",1.376,T-Mobile US Inc,Common Stock,Communication Services,12/22/2020
+QQQ,22160K105,COST ,"5,556,755","2,011,712,012.65",1.339,Costco Wholesale Corp,Common Stock,Consumer Staples,12/22/2020
+QQQ,882508104,TXN ,"11,560,363","1,878,790,194.76",1.250,Texas Instruments Inc,Common Stock,Information Technology,12/22/2020
+QQQ,031162100,AMGN ,"7,331,688","1,620,229,731.12",1.078,Amgen Inc,Common Stock,Health Care,12/22/2020
+QQQ,16119P108,CHTR ,"2,517,168","1,613,756,404.80",1.074,Charter Communications Inc,Common Stock,Communication Services,12/22/2020
+QQQ,855244109,SBUX ,"14,781,330","1,513,756,005.30",1.007,Starbucks Corp,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,007903107,AMD ,"15,146,713","1,411,067,783.08",0.939,Advanced Micro Devices Inc,Common Stock,Information Technology,12/22/2020
+QQQ,461202103,INTU ,"3,308,968","1,257,308,570.96",0.837,Intuit Inc,Common Stock,Information Technology,12/22/2020
+QQQ,46120E602,ISRG ,"1,480,491","1,206,970,287.75",0.803,Intuitive Surgical Inc,Common Stock,Health Care,12/22/2020
+QQQ,58733R102,MELI ,"626,896","1,086,028,361.44",0.723,MercadoLibre Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,09857L108,BKNG ,"515,771","1,058,785,024.22",0.705,Booking Holdings Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,609207105,MDLZ ,"18,011,178","1,029,518,934.48",0.685,Mondelez International Inc,Common Stock,Consumer Staples,12/22/2020
+QQQ,98980L101,ZM ,"2,452,745","1,003,172,705.00",0.668,Zoom Video Communications Inc,Common Stock,Information Technology,12/22/2020
+QQQ,595112103,MU ,"14,019,655","987,544,498.20",0.657,Micron Technology Inc,Common Stock,Information Technology,12/22/2020
+QQQ,038222105,AMAT ,"11,501,686","985,004,389.04",0.655,Applied Materials Inc,Common Stock,Information Technology,12/22/2020
+QQQ,053015103,ADP ,"5,400,372","952,301,598.48",0.634,Automatic Data Processing Inc,Common Stock,Information Technology,12/22/2020
+QQQ,337738108,FISV ,"8,443,355","933,159,594.60",0.621,Fiserv Inc,Common Stock,Information Technology,12/22/2020
+QQQ,47215P106,JD ,"10,974,821","908,605,430.59",0.605,JD.com Inc ADR,American Depository Receipt,Consumer Discretionary,12/22/2020
+QQQ,375558103,GILD ,"15,786,750","899,844,750.00",0.599,Gilead Sciences Inc,Common Stock,Health Care,12/22/2020
+QQQ,00507V109,ATVI ,"9,733,206","870,343,280.52",0.579,Activision Blizzard Inc,Common Stock,Communication Services,12/22/2020
+QQQ,512807108,LRCX ,"1,813,628","865,009,874.60",0.576,Lam Research Corp,Common Stock,Information Technology,12/22/2020
+QQQ,126408103,CSX ,"9,631,396","862,491,511.80",0.574,CSX Corp,Common Stock,Industrials,12/22/2020
+QQQ,052769106,ADSK ,"2,761,578","839,133,091.08",0.558,Autodesk Inc,Common Stock,Information Technology,12/22/2020
+QQQ,92532F100,VRTX ,"3,274,842","769,260,385.80",0.512,Vertex Pharmaceuticals Inc,Common Stock,Health Care,12/22/2020
+QQQ,452327109,ILMN ,"1,838,671","682,073,394.16",0.454,Illumina Inc,Common Stock,Health Care,12/22/2020
+QQQ,032654105,ADI ,"4,653,193","671,362,686.04",0.447,Analog Devices Inc,Common Stock,Information Technology,12/22/2020
+QQQ,056752108,BIDU ,"3,477,991","665,200,558.66",0.443,Baidu Inc ADR,American Depository Receipt,Communication Services,12/22/2020
+QQQ,75886F107,REGN ,"1,320,548","647,147,752.88",0.431,Regeneron Pharmaceuticals Inc,Common Stock,Health Care,12/22/2020
+QQQ,60770K107,MRNA ,"4,983,467","627,318,825.96",0.417,Moderna Inc,Common Stock,Health Care,12/22/2020
+QQQ,61174X109,MNST ,"6,648,471","586,860,535.17",0.391,Monster Beverage Corp,Common Stock,Consumer Staples,12/22/2020
+QQQ,256163106,DOCU ,"2,331,914","586,709,562.40",0.390,DocuSign Inc,Common Stock,Information Technology,12/22/2020
+QQQ,98138H101,WDAY ,"2,266,903","584,203,572.13",0.389,Workday Inc,Common Stock,Information Technology,12/22/2020
+QQQ,550021109,LULU ,"1,573,221","566,469,685.47",0.377,Lululemon Athletica Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,N6596X109,NXPI ,"3,523,107","550,943,472.66",0.367,NXP Semiconductors NV,Common Stock,Information Technology,12/22/2020
+QQQ,49271V100,KDP ,"17,722,648","550,642,673.36",0.366,Keurig Dr Pepper Inc,Common Stock,Consumer Staples,12/22/2020
+QQQ,192446102,CTSH ,"6,733,168","545,521,271.36",0.363,Cognizant Technology Solutions Corp,Common Stock,Information Technology,12/22/2020
+QQQ,45168D104,IDXX ,"1,074,264","536,218,875.60",0.357,IDEXX Laboratories Inc,Common Stock,Health Care,12/22/2020
+QQQ,016255101,ALGN ,"993,010","532,839,235.90",0.355,Align Technology Inc,Common Stock,Health Care,12/22/2020
+QQQ,500754106,KHC ,"15,397,463","529,518,752.57",0.352,Kraft Heinz Co/The,Common Stock,Consumer Staples,12/22/2020
+QQQ,778296103,ROST ,"4,483,462","523,399,353.88",0.348,Ross Stores Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,57667L107,MTCH ,"3,349,730","522,959,847.60",0.348,Match Group Inc,Common Stock,Communication Services,12/22/2020
+QQQ,722304102,PDD ,"3,757,842","522,415,194.84",0.348,Pinduoduo Inc ADR,American Depository Receipt,Consumer Discretionary,12/22/2020
+QQQ,70614W100,PTON ,"3,217,896","518,757,014.16",0.345,Peloton Interactive Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,571903202,MAR ,"4,084,572","515,718,060.72",0.343,Marriott International Inc/MD,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,30161N101,EXC ,"12,286,158","513,069,958.08",0.341,Exelon Corp,Common Stock,Utilities,12/22/2020
+QQQ,285512109,EA ,"3,650,356","508,969,137.08",0.339,Electronic Arts Inc,Common Stock,Communication Services,12/22/2020
+QQQ,025537101,AEP ,"6,251,419","508,865,506.60",0.339,American Electric Power Co Inc,Common Stock,Utilities,12/22/2020
+QQQ,482480100,KLAC ,"1,945,214","501,067,674.26",0.333,KLA Corp,Common Stock,Information Technology,12/22/2020
+QQQ,871607107,SNPS ,"1,911,258","493,200,126.90",0.328,Synopsys Inc,Common Stock,Information Technology,12/22/2020
+QQQ,09062X103,BIIB ,"1,937,968","480,364,128.16",0.320,Biogen Inc,Common Stock,Health Care,12/22/2020
+QQQ,127387108,CDNS ,"3,512,801","472,015,070.37",0.314,Cadence Design Systems Inc,Common Stock,Information Technology,12/22/2020
+QQQ,172908105,CTAS ,"1,317,641","458,539,068.00",0.305,Cintas Corp,Common Stock,Industrials,12/22/2020
+QQQ,N07059210,ASML ,"953,859","454,208,578.62",0.302,ASML Holding NV,American Depository Receipt - NY,Information Technology,12/22/2020
+QQQ,595017104,MCHP ,"3,279,129","449,076,716.55",0.299,Microchip Technology Inc,Common Stock,Information Technology,12/22/2020
+QQQ,278642103,EBAY ,"8,681,360","448,131,803.20",0.298,eBay Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,81181C104,SGEN ,"2,270,742","447,131,807.22",0.298,Seagen Inc,Common Stock,Health Care,12/22/2020
+QQQ,983919101,XLNX ,"3,087,008","445,023,073.28",0.296,Xilinx Inc,Common Stock,Information Technology,12/22/2020
+QQQ,704326107,PAYX ,"4,527,447","437,487,203.61",0.291,Paychex Inc,Common Stock,Information Technology,12/22/2020
+QQQ,679295105,OKTA ,"1,510,772","431,476,483.20",0.287,Okta Inc,Common Stock,Information Technology,12/22/2020
+QQQ,98389B100,XEL ,"6,617,512","429,013,302.96",0.285,Xcel Energy Inc,Common Stock,Utilities,12/22/2020
+QQQ,252131107,DXCM ,"1,209,370","428,395,135.10",0.285,DexCom Inc,Common Stock,Health Care,12/22/2020
+QQQ,931427108,WBA ,"10,905,177","428,246,300.79",0.285,Walgreens Boots Alliance Inc,Common Stock,Consumer Staples,12/22/2020
+QQQ,015351109,ALXN ,"2,756,094","423,914,818.14",0.282,Alexion Pharmaceuticals Inc,Common Stock,Health Care,12/22/2020
+QQQ,67103H107,ORLY ,"912,400","413,673,036.00",0.275,O'Reilly Automotive Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,92345Y106,VRSK ,"2,047,623","413,476,512.39",0.275,Verisk Analytics Inc,Common Stock,Industrials,12/22/2020
+QQQ,G06242104,TEAM ,"1,664,410","411,125,914.10",0.274,Atlassian Corp PLC,Common Stock,Information Technology,12/22/2020
+QQQ,G5876H105,MRVL ,"8,439,875","397,940,106.25",0.265,Marvell Technology Group Ltd,Common Stock,Information Technology,12/22/2020
+QQQ,03662Q105,ANSS ,"1,081,585","391,869,061.35",0.261,ANSYS Inc,Common Stock,Information Technology,12/22/2020
+QQQ,64110W102,NTES ,"4,122,663","381,346,327.50",0.254,NetEase Inc ADR,American Depository Receipt,Communication Services,12/22/2020
+QQQ,693718108,PCAR ,"4,363,012","370,288,828.44",0.246,PACCAR Inc,Common Stock,Industrials,12/22/2020
+QQQ,217204106,CPRT ,"2,973,788","365,894,875.52",0.243,Copart Inc,Common Stock,Industrials,12/22/2020
+QQQ,311900104,FAST ,"7,229,511","357,643,909.17",0.238,Fastenal Co,Common Stock,Industrials,12/22/2020
+QQQ,848637104,SPLK ,"2,019,962","357,533,274.00",0.238,Splunk Inc,Common Stock,Information Technology,12/22/2020
+QQQ,82968B103,SIRI ,"53,517,314","335,553,558.78",0.223,Sirius XM Holdings Inc,Common Stock,Communication Services,12/22/2020
+QQQ,256746108,DLTR ,"2,961,951","322,793,419.98",0.215,Dollar Tree Inc,Common Stock,Consumer Discretionary,12/22/2020
+QQQ,83088M102,SWKS ,"2,091,574","312,543,902.82",0.208,Skyworks Solutions Inc,Common Stock,Information Technology,12/22/2020
+QQQ,92343E102,VRSN ,"1,437,072","310,896,156.48",0.207,VeriSign Inc,Common Stock,Information Technology,12/22/2020
+QQQ,156782104,CERN ,"3,861,136","298,774,703.68",0.199,Cerner Corp,Common Stock,Health Care,12/22/2020
+QQQ,57772K101,MXIM ,"3,366,342","290,885,612.22",0.194,Maxim Integrated Products Inc,Common Stock,Information Technology,12/22/2020
+QQQ,45337C102,INCY ,"2,757,982","242,674,836.18",0.161,Incyte Corp,Common Stock,Health Care,12/22/2020
+QQQ,M22465104,CHKP ,"1,765,654","235,573,556.68",0.157,Check Point Software Technologies Ltd,Common Stock,Information Technology,12/22/2020
+QQQ,12514G108,CDW ,"1,800,785","235,452,638.75",0.157,CDW Corp/DE,Common Stock,Information Technology,12/22/2020
+QQQ,89677Q107,TCOM ,"6,586,268","217,017,530.60",0.144,Trip.com Group Ltd ADR,American Depository Receipt,Consumer Discretionary,12/22/2020
+QQQ,35137L105,FOXA ,"4,250,950","115,923,406.50",0.077,Fox Corp,Common Stock,Communication Services,12/22/2020
+QQQ,35137L204,FOX ,"3,247,074","87,606,056.52",0.058,Fox Corp,Common Stock,Communication Services,12/22/2020
