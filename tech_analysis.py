@@ -154,19 +154,33 @@ def slope_calc(prev_slope_days, prev_slope, slope_value = .15):
         
         return (zero_slope, lower_slope)
     
-def get_vader_score(symbol, news_sentiment, date):
+def get_vader_score(symbol, dateValue):
     vaderScore = 0
     scores = []
     news_sentiment = pd.read_csv('data/news/news.csv', index_col=[0,1])
+    min_time = dt.datetime.min.time()
+    dateTime = dt.datetime.combine(dateValue, min_time)
+    date = dateTime.strftime("%Y-%m-%d")
+
+    #NEED TO FIND A WAY TO ACCESS THIS DF!!!!
+
+    # print(date)
+    # print(type(date))
+    # print(news_sentiment.index[0][1])
+    # print(type(news_sentiment.index[0][1]))
+
     try:
         scores = []
-        scores.append(news_sentiment[symbol, date])
+        scores.append(news_sentiment.loc[(symbol, date)][0])
         days = 1
+        date_time_obj = dt.datetime.strptime(date, '%Y-%m-%d')
         while len(scores) < 5 and days < 10:
             days += 1
-            date = date - timedelta(days=1)
+            
+            date_time_obj = date_time_obj - timedelta(days=1)
+            date = date_time_obj.strftime("%Y-%m-%d")
             try:
-                scores.append(news_sentiment[symbol, date])
+                scores.append(news_sentiment.loc[(symbol, date)][0])
             except KeyError:
                 continue
     except KeyError:
@@ -187,13 +201,15 @@ def curr_below_bottom(current_day):
     return current_day["Close"] <= current_day["Bot BBand"]
 
 
-def buy_sell(symbol, news_sentiment, data):
+
+#Implementing Boolliger Bands Buy Sell Strat
+def buy_sell(symbol, data):
     buy_list = []
     sell_list = []
 
-    side = ""
 
     bought = False
+    
 
     '''
     STRAT:
@@ -207,7 +223,7 @@ def buy_sell(symbol, news_sentiment, data):
     
     Sell:
         If the price hits the lower band, this protects risk from bad buy/sell decisions and allows price to ride the trend
-        or sell when avg daily sentiment is negative
+        or sell when sentiment is negative
         
     '''
 
@@ -216,73 +232,59 @@ def buy_sell(symbol, news_sentiment, data):
 
     buy_list = ([np.nan] * (BBPeriod + prev_days_threshold))
     sell_list = ([np.nan] * (BBPeriod + prev_days_threshold))
-
-
     prev_slope = 0
 
     for i in range(BBPeriod + prev_days_threshold, len(data)):
-        
         prev_days = data.iloc[i-prev_days_threshold:i]
+        # below_lower = prev_days[prev_days["Close"] <= prev_days["Bot BBand"] * 1.03]
+
+        # below_flag = False
+        # if(len(below_lower) > 0):
+        #     below_flag = True 
         
-        prev_below_flag = prev_below_bottom_band(prev_days)
-        
+        below_flag = prev_below_bottom_band(prev_days)
         
         current_day = data.iloc[i]
 
         far_from_bottom = is_far_from_bottom(current_day)
         
-        
         prev_slope_days = data.iloc[i-5:i]
-        
         slope_result = slope_calc(prev_slope_days, prev_slope)
-        
         zero_slope = slope_result[0]
         prev_slope = slope_result[1]
         
 
-        #date = dt.datetime.strptime(data.index[i], "%Y-%m-%d").date()
         date = data.index[i].to_pydatetime().date()
-
-        vaderScore = get_vader_score(symbol, news_sentiment, date)
-
+        vaderScore = get_vader_score(symbol, date)
+      
         overbought = is_overbought(data, i)
         oversold = is_oversold(data, i)
 
-        current_below = curr_below_bottom(current_day)
-
-        if(((prev_below_flag and far_from_bottom and zero_slope and not overbought) or vaderScore >= .2) and bought == False):
-            #BUY
+        if(((below_flag and far_from_bottom and zero_slope and not overbought) or vaderScore >= .2) and bought == False):
+        
             buy_list.append(data["Close"][i])
             sell_list.append(np.nan)
             bought = True
 
-            side = "buy"
 
-        elif(((current_below and not oversold) or vaderScore <= -.2) and bought == True):
-            #SELL
+        elif((((current_day["Close"] <= current_day["Bot BBand"]) and not oversold) or (vaderScore <= -.2)) and bought == True):
             buy_list.append(np.nan)
             sell_list.append(data["Close"][i])
             bought = False
 
-            side = "sell"
-
-
         else:
+            
             buy_list.append(np.nan)
             sell_list.append(np.nan)
-
-            side = "pass"
 
 
 
     data["Buy"] = buy_list
     data["Sell"] = sell_list
+    
+    
 
-    return data, side
-
-
-
-
+    return data
 
 
 
@@ -375,11 +377,70 @@ def reset_news():
     news_sentiment.to_csv("data/news/news.csv")
 
 
+def buy_sell_today(symbol, data):
+    side = ""
+    
+    BBPeriod = 14
+    prev_days_threshold = 14
+
+    prev_slope = 0
+
+    prev_days = data.iloc[-prev_days_threshold:]
+    
+    below_flag = prev_below_bottom_band(prev_days)
+    current_day = data.iloc[-1]
+
+    far_from_bottom = is_far_from_bottom(current_day)
+    
+    prev_slope_days = data.iloc[-5:]
+    slope_result = slope_calc(prev_slope_days, prev_slope)
+    zero_slope = slope_result[0]
+    prev_slope = slope_result[1]
+    
+
+    date = data.index[-1].to_pydatetime().date()
+    vaderScore = get_vader_score(symbol, date)
+    
+    overbought = is_overbought(data, -1)
+    oversold = is_oversold(data, -1)
+
+    if(((below_flag and far_from_bottom and zero_slope and not overbought) or vaderScore >= .2)):
+        side = "buy"
+
+
+    elif((((current_day["Close"] <= current_day["Bot BBand"]) and not oversold) or (vaderScore <= -.2))):
+        side = "sell"
+
+    else:
+        
+        side = "pass"
+
+
+
+    return side
+
+
+
+
+symbol = "AAPL"
+data = yf.download(symbol, "2020-01-01", "2021-01-08")
+data = get_BBands(data)
+data = get_RSI(data)
+
+# data = buy_sell(symbol, data)
+
+# print(data[data["Buy"].notnull()])
+# print(data[data["Sell"].notnull()])
+
+
+print(data)
+side = buy_sell_today(symbol, data)
+print(side)
+exit()
 
 
 #reset_news()
-news_sentiment = get_news_sentiment()
-
+news_sentiment = pd.read_csv("data/news/news.csv")
 holdings = open('data/qqq.csv').readlines()
 
 symbols = [holding.split(',')[2].strip() for holding in holdings][1:]
@@ -388,7 +449,6 @@ totalProfit = 0
 totalEntry = 0
 totalExitProfit = 0
 countWorked = 0
-news_sentiment = pd.read_csv("data/news/news.csv")
 for symbol in symbols:
     
     no_data = False
@@ -403,8 +463,9 @@ for symbol in symbols:
     data = get_BBands(data)
     data = get_RSI(data)
 
-    result = buy_sell(symbol, news_sentiment, data)
-    data = result[0]
+    result = buy_sell(symbol, data, news_sentiment)
+    #data = result[0]
+    data = result
 
     plot(data, symbol)
 

@@ -416,7 +416,6 @@ def run():
         
 
         data = get_BBands(data)
-        data = get_EMA(data)
         data = get_RSI(data)
 
         data = buy_sell(symbol, data, news_sentiment)
