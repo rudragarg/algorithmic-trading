@@ -8,7 +8,9 @@ from scipy import stats
 import numpy as np
 import yfinance as yf
 import datetime as dt
-import datetime as dt
+from datetime import timedelta
+from rtstock.stock import Stock
+import statistics
 
 import nltk
 #nltk.download('vader_lexicon')
@@ -96,7 +98,7 @@ def get_news_sentiment():
     return result
 
 def get_data(symbol):
-    return yf.download(symbol,'2017-01-01','2020-12-31')
+    return yf.download(symbol,'2020-01-01','2020-12-31')
 
 def get_entry_price(data):
     return data.iloc[0,3]
@@ -121,7 +123,7 @@ def get_BBands(data):
 
 def get_EMA(data):
     ShortEMA = btalib.ema(data, period=12)
-    LongEMA = btalib.ema(data, period=26)
+    LongEMA = btalib.ema(data, period=200)
 
     data["ShortEMA"] = ShortEMA.df
     data["LongEMA"] = LongEMA.df
@@ -140,8 +142,8 @@ def buy_sell(symbol, data, news_sentiment):
     buy_list = []
     sell_list = []
 
-    # senti_buy_list = []
-    # senti_sell_list = []
+    senti_buy_list = []
+    senti_sell_list = []
 
     # senti_bought = False
 
@@ -169,13 +171,13 @@ def buy_sell(symbol, data, news_sentiment):
     # temp_counter = 0
 
     BBPeriod = 14
-    prev_days_threshold = 13
+    prev_days_threshold = 14
 
     buy_list = ([np.nan] * (BBPeriod + prev_days_threshold))
     sell_list = ([np.nan] * (BBPeriod + prev_days_threshold))
 
-    # senti_buy_list = ([np.nan] * (BBPeriod + prev_days_threshold))
-    # senti_sell_list = ([np.nan] * (BBPeriod + prev_days_threshold))
+    senti_buy_list = ([np.nan] * (BBPeriod + prev_days_threshold))
+    senti_sell_list = ([np.nan] * (BBPeriod + prev_days_threshold))
 
     #print(len(buy_list))
     #print(buy_list)
@@ -184,10 +186,11 @@ def buy_sell(symbol, data, news_sentiment):
     date_bought = np.nan
     expection_counter = 0
     counter = 0
+    stop_loss = -1
     for i in range(BBPeriod + prev_days_threshold, len(data)):
         prev_days = data.iloc[i-prev_days_threshold:i]
         #print(prev_days)
-        below_lower = prev_days[prev_days["Close"] <= prev_days["Bot BBand"] * 1.05]
+        below_lower = prev_days[prev_days["Close"] <= prev_days["Bot BBand"] * 1.03]
         #if(prev_days["Close"] <= prev_days["Bot BBand"]):
             #print()
         below_flag = False
@@ -198,7 +201,7 @@ def buy_sell(symbol, data, news_sentiment):
         current_day = data.iloc[i]
         far_from_bottom = False
         #print(data.index[i])
-        if (below_flag and current_day["Close"] > 1.05*current_day["Bot BBand"]):
+        if (below_flag and current_day["Close"] > 1.03*current_day["Bot BBand"]):
             #print(below_lower)
             far_from_bottom = True
             #print(data.index[i])
@@ -235,7 +238,8 @@ def buy_sell(symbol, data, news_sentiment):
 
         #print("Date: {}...Slope:{}".format(data.index[i], slope))
 
-        if(abs(lower_slope) <= .2 or (lower_slope > 0 and prev_slope < 0)):
+        #CAN CHANGE THE SLOPE HERE
+        if(abs(lower_slope) <= .15 or (lower_slope > 0 and prev_slope < 0)):
             zero_slope = True
             # print("Change near 0 slope at", data.index[i-1])
         
@@ -244,23 +248,51 @@ def buy_sell(symbol, data, news_sentiment):
 
 
         vaderScore = 0
+        scores = []
         date = data.index[i].to_pydatetime().date()
         try:
-            vaderScore = news_sentiment[symbol, date]
+            scores = []
+            scores.append(news_sentiment[symbol, date])
+            days = 1
+            while len(scores) < 5 and days < 10:
+                days += 1
+                date = date - timedelta(days=1)
+                try:
+                    scores.append(news_sentiment[symbol, date])
+                except KeyError:
+                    continue
         except KeyError:
             pass
 
-        if(((below_flag and (far_from_bottom and zero_slope) and data["RSI"][i] <= 70) or vaderScore >= .25) and bought == False):
-            date_bought = data.index[i]
+        if (len(scores) > 0):
+            vaderScore = statistics.mean(scores)
+
+        if(((below_flag and far_from_bottom and zero_slope and data["RSI"][i] <= 70) or vaderScore >= .2) and bought == False):
+            if (vaderScore >= .2):
+                senti_buy_list.append(data["Close"][i])
+                senti_sell_list.append(np.nan)
+            else:
+                senti_buy_list.append(np.nan)
+                senti_sell_list.append(np.nan)
             buy_list.append(data["Close"][i])
+            #stop_loss = data["Close"][i] * .8
             sell_list.append(np.nan)
             bought = True
             # temp_counter = 0
 
 
-        elif((((current_day["Close"] <= current_day["Bot BBand"] or sell_bband) and data["RSI"][i] >= 30) or vaderScore <= -.25) and bought == True):
+        elif((((current_day["Close"] <= current_day["Bot BBand"] or sell_bband) and data["RSI"][i] >= 30) or (vaderScore <= -.2) or (data["Close"][i] <= stop_loss)) and bought == True):
+            if (vaderScore <= -.2):
+                senti_buy_list.append(np.nan)
+                senti_sell_list.append(data["Close"][i])
+            else:
+                senti_buy_list.append(np.nan)
+                senti_sell_list.append(np.nan)
+
             buy_list.append(np.nan)
             sell_list.append(data["Close"][i])
+
+            stop_loss = -1
 
             bought = False
             above_upper = False
@@ -268,6 +300,8 @@ def buy_sell(symbol, data, news_sentiment):
             
             buy_list.append(np.nan)
             sell_list.append(np.nan)
+            senti_buy_list.append(np.nan)
+            senti_sell_list.append(np.nan)
 
             # temp_counter += 1
             #print(temp_counter)
@@ -279,8 +313,8 @@ def buy_sell(symbol, data, news_sentiment):
     data["Buy"] = buy_list
     data["Sell"] = sell_list
     
-    # data["Buy_Senti"] = senti_buy_list
-    # data["Sell_Senti"] = senti_sell_list
+    data["Buy_Senti"] = senti_buy_list
+    data["Sell_Senti"] = senti_sell_list
     
     
 
@@ -293,14 +327,14 @@ def buy_sell(symbol, data, news_sentiment):
 def plot(data, symbol):
     fig = plt.figure(figsize=(8, 6))
     plt.title('Buy and Sell {}'.format(symbol))
-    plt.plot(data["Close"], color = "blue", alpha = .25)
+    plt.plot(data["Close"], color = "blue", alpha = .5)
     plt.plot(data["Mid BBand"], color = "orange", alpha = .75)
     plt.plot(data["Top BBand"], color = "purple", alpha = .75)
     plt.plot(data["Bot BBand"], color = "purple", alpha = .75)
-    plt.plot(data["Sell BBand"], color = "red", alpha = .75)
+    #plt.plot(data["Sell BBand"], color = "red", alpha = .75)
     
     # plt.plot(data["ShortEMA"], color = "red", alpha = .5)
-    # plt.plot(data["LongEMA"], color = "green", alpha = .5)
+    #plt.plot(data["LongEMA"], color = "red", alpha = .5)
     if(not data["Buy"].isnull().all()):
         plt.scatter(data.index, data["Buy"], color = 'green', marker="^", alpha=1)
     if(not data["Sell"].isnull().all()):
@@ -365,6 +399,11 @@ def run():
     totalEntry = 0
     totalExitProfit = 0
     news_sentiment = get_news_sentiment()
+    print(news_sentiment.shape)
+    print(news_sentiment)
+
+
+    countWorked = 0
     for symbol in symbols:
      
         no_data = False
@@ -377,7 +416,7 @@ def run():
         
 
         data = get_BBands(data)
-        #data = get_EMA(data)
+        data = get_EMA(data)
         data = get_RSI(data)
 
         data = buy_sell(symbol, data, news_sentiment)
@@ -402,8 +441,10 @@ def run():
         comparedChangepercent = "{:.0%}".format(comparedChange)
 
         print("{} or {} per share of {}...compared to {}".format(profit, percentChange, symbol, comparedChangepercent))
-        if(change > comparedChange):
+        if(change >= comparedChange):
             print("===============================BBANDS STRAT WORKED===============================")
+            countWorked += 1
+
         
 
     totalChange = totalProfit/totalEntry
@@ -411,6 +452,7 @@ def run():
     print("====TOTAL PROFIT:", totalProfit)
     print("====TOTAL ENTRY:", totalEntry)
     print("====TOTAL CHANGE:", percentChange)
+    print("====NUM TIMES WORK: {}/{}".format(countWorked, len(symbols)))
 
     woEMAProfit = totalExitProfit/totalEntry
     woEMAProfitPercent = "{:.0%}".format(woEMAProfit)
@@ -418,10 +460,15 @@ def run():
     print("========Without BBANDS========")
     print("=====TOTAL EXIT PROFIT:", totalExitProfit)
     print("=====TOTAL EXIT PROFIT:", woEMAProfitPercent)
+
     
     #return totalProfit, totalChange
 
 run()
+
+# temp = yf.download("AAPL", "2020-12-31", "2021-01-04")
+# print(temp)
+
 
 
 #temp = get_news_sentiment()
