@@ -68,13 +68,13 @@ def trading_bot():
     # holdings = open('data/qqq.csv').readlines()
     # symbols = [holding.split(',')[2].strip() for holding in holdings][1:]
 
-    numberOfShares = 10
+    numberOfShares = 5
     for symbol in updatedStocks:
         side = buy_sell_today(symbol)
         bought = is_bought(symbol) 
         if(side != "pass"):
             if((bought and side == "sell") or (not bought and side == "buy")):
-                reponse = create_order(symbol, numberOfShares, side, "market", "opg")
+                response = create_order(symbol, numberOfShares, side, "market", "opg")
                 if (response.get("message") == "insufficient buying power"):
                     print("insufficient buying power to buy/sell {}".format(symbol))
                 else:
