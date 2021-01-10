@@ -99,11 +99,11 @@ def get_news_sentiment():
 
 
 def get_data(symbol):
-    # data = pd.read_csv("data/prices/{}.csv".format(symbol))
-    # data.index = data['Date'] 
-    # del data['Date'] 
-    # return data
-    return yf.download(symbol,'2020-01-01','2020-12-31')
+    data = pd.read_csv("data/prices/{}.csv".format(symbol))
+    data.index = data['Date'] 
+    del data['Date'] 
+    return data
+    #return yf.download(symbol,'2020-01-01','2020-12-31')
 
 def get_BBands(data):
     mid, top, bot = btalib.bbands(data, period = 20, devs = 2.0)
@@ -158,9 +158,9 @@ def get_vader_score(symbol, dateValue):
     vaderScore = 0
     scores = []
     news_sentiment = pd.read_csv('data/news/news.csv', index_col=[0,1])
-    min_time = dt.datetime.min.time()
-    dateTime = dt.datetime.combine(dateValue, min_time)
-    date = dateTime.strftime("%Y-%m-%d")
+    # min_time = dt.datetime.min.time()
+    # dateTime = dt.datetime.combine(dateValue, min_time)
+    # date = dateTime.strftime("%Y-%m-%d")
 
     #NEED TO FIND A WAY TO ACCESS THIS DF!!!!
 
@@ -168,7 +168,7 @@ def get_vader_score(symbol, dateValue):
     # print(type(date))
     # print(news_sentiment.index[0][1])
     # print(type(news_sentiment.index[0][1]))
-
+    date = dateValue
     try:
         scores = []
         scores.append(news_sentiment.loc[(symbol, date)][0])
@@ -206,7 +206,6 @@ def curr_below_bottom(current_day):
 def buy_sell(symbol, data):
     buy_list = []
     sell_list = []
-
 
     bought = False
     
@@ -254,7 +253,7 @@ def buy_sell(symbol, data):
         prev_slope = slope_result[1]
         
 
-        date = data.index[i].to_pydatetime().date()
+        #date = data.index[i].to_pydatetime().date()
         vaderScore = get_vader_score(symbol, date)
       
         overbought = is_overbought(data, i)
@@ -367,6 +366,12 @@ def update_news():
             print(news_sentiment[index])
             saved_news.loc[(symbol, date), :] = news_sentiment[index]
         
+        elif(   abs(saved_news.loc[(symbol, date), :][0] - news_sentiment[index]) > .01 and 
+                dateIndex == dt.date.today()):
+            print("Updating scores of {} and {}".format(symbol, date))
+            print("from {} to {}".format(saved_news.loc[(symbol, date), :][0], news_sentiment[index]))
+            saved_news.loc[(symbol, date), :] = news_sentiment[index]
+        
 
     saved_news = saved_news.sort_index()
     saved_news.to_csv("data/news/news.csv")
@@ -377,9 +382,13 @@ def reset_news():
     news_sentiment.to_csv("data/news/news.csv")
 
 
-def buy_sell_today(symbol, data):
+def buy_sell_today(symbol):
     side = ""
     
+    data = get_data(symbol)
+    data = get_BBands(data)
+    data = get_RSI(data)
+
     BBPeriod = 14
     prev_days_threshold = 14
 
@@ -398,7 +407,8 @@ def buy_sell_today(symbol, data):
     prev_slope = slope_result[1]
     
 
-    date = data.index[-1].to_pydatetime().date()
+    #date = data.index[-1].to_pydatetime().date()
+    date = data.index[-1]
     vaderScore = get_vader_score(symbol, date)
     
     overbought = is_overbought(data, -1)
@@ -422,86 +432,86 @@ def buy_sell_today(symbol, data):
 
 
 
-symbol = "AAPL"
-data = yf.download(symbol, "2020-01-01", "2021-01-08")
-data = get_BBands(data)
-data = get_RSI(data)
+# symbol = "AAPL"
+# data = yf.download(symbol, "2020-01-01", "2021-01-09")
+# data = get_BBands(data)
+# data = get_RSI(data)
 
-# data = buy_sell(symbol, data)
+# # data = buy_sell(symbol, data)
 
-# print(data[data["Buy"].notnull()])
-# print(data[data["Sell"].notnull()])
-
-
-print(data)
-side = buy_sell_today(symbol, data)
-print(side)
-exit()
+# # print(data[data["Buy"].notnull()])
+# # print(data[data["Sell"].notnull()])
 
 
-#reset_news()
-news_sentiment = pd.read_csv("data/news/news.csv")
-holdings = open('data/qqq.csv').readlines()
+# print(data)
+# side = buy_sell_today(symbol, data)
+# print(side)
+# exit()
 
-symbols = [holding.split(',')[2].strip() for holding in holdings][1:]
 
-totalProfit = 0
-totalEntry = 0
-totalExitProfit = 0
-countWorked = 0
-for symbol in symbols:
+# # 
+# news_sentiment = pd.read_csv("data/news/news.csv")
+# holdings = open('data/qqq.csv').readlines()
+
+# symbols = [holding.split(',')[2].strip() for holding in holdings][1:]
+
+# totalProfit = 0
+# totalEntry = 0
+# totalExitProfit = 0
+# countWorked = 0
+# for symbol in symbols:
     
-    no_data = False
-    try:
-        data = get_data(symbol)
-    except:
-        no_data = True
-    if (no_data):
-        continue
-    
-
-    data = get_BBands(data)
-    data = get_RSI(data)
-
-    result = buy_sell(symbol, data, news_sentiment)
-    #data = result[0]
-    data = result
-
-    plot(data, symbol)
-
-    entry = get_entry_price(data)
-    totalEntry += entry
-
-    exitProfit = get_exit_profit(data)
-    totalExitProfit += exitProfit
-
-    profit = get_total_profit(data)
-    
-    totalProfit += profit
-
-    change = profit/entry
-    percentChange = "{:.0%}".format(change)
-    
-    comparedChange = exitProfit/entry
-    comparedChangepercent = "{:.0%}".format(comparedChange)
-
-    print("{} or {} per share of {}...compared to {}".format(profit, percentChange, symbol, comparedChangepercent))
-    if(change >= comparedChange):
-        print("===============================BBANDS STRAT WORKED===============================")
-        countWorked += 1
-
+#     no_data = False
+#     try:
+#         data = get_data(symbol)
+#     except:
+#         no_data = True
+#     if (no_data):
+#         continue
     
 
-totalChange = totalProfit/totalEntry
-percentChange = "{:.0%}".format(totalChange)
-print("====TOTAL PROFIT:", totalProfit)
-print("====TOTAL ENTRY:", totalEntry)
-print("====TOTAL CHANGE:", percentChange)
-print("====NUM TIMES WORK: {}/{}".format(countWorked, len(symbols)))
+#     data = get_BBands(data)
+#     data = get_RSI(data)
 
-woEMAProfit = totalExitProfit/totalEntry
-woEMAProfitPercent = "{:.0%}".format(woEMAProfit)
+#     result = buy_sell(symbol, data)
+#     #data = result[0]
+#     data = result
 
-print("========Without BBANDS========")
-print("=====TOTAL EXIT PROFIT:", totalExitProfit)
-print("=====TOTAL EXIT PROFIT:", woEMAProfitPercent)
+#     plot(data, symbol)
+
+#     entry = get_entry_price(data)
+#     totalEntry += entry
+
+#     exitProfit = get_exit_profit(data)
+#     totalExitProfit += exitProfit
+
+#     profit = get_total_profit(data)
+    
+#     totalProfit += profit
+
+#     change = profit/entry
+#     percentChange = "{:.0%}".format(change)
+    
+#     comparedChange = exitProfit/entry
+#     comparedChangepercent = "{:.0%}".format(comparedChange)
+
+#     print("{} or {} per share of {}...compared to {}".format(profit, percentChange, symbol, comparedChangepercent))
+#     if(change >= comparedChange):
+#         print("===============================BBANDS STRAT WORKED===============================")
+#         countWorked += 1
+
+    
+
+# totalChange = totalProfit/totalEntry
+# percentChange = "{:.0%}".format(totalChange)
+# print("====TOTAL PROFIT:", totalProfit)
+# print("====TOTAL ENTRY:", totalEntry)
+# print("====TOTAL CHANGE:", percentChange)
+# print("====NUM TIMES WORK: {}/{}".format(countWorked, len(symbols)))
+
+# woEMAProfit = totalExitProfit/totalEntry
+# woEMAProfitPercent = "{:.0%}".format(woEMAProfit)
+
+# print("========Without BBANDS========")
+# print("=====TOTAL EXIT PROFIT:", totalExitProfit)
+# print("=====TOTAL EXIT PROFIT:", woEMAProfitPercent)

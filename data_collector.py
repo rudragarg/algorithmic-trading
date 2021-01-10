@@ -3,8 +3,9 @@ import pandas as pd
 import requests
 from time import sleep
 from config import *
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import numpy as np
+import os
 
 holdings = open('data/qqq.csv').readlines()
 
@@ -15,6 +16,31 @@ def get_historic_data(startDate, endDate):
         data = yf.download(symbol, startDate, endDate)
         #print(data)
         data.to_csv("data/prices/{}.csv".format(symbol))
+
+def update_price_data():
+    tom = date.today() + timedelta(days=1)
+    min_time = datetime.min.time()
+    dateTime = datetime.combine(tom, min_time)
+    endDate = dateTime.strftime("%Y-%m-%d")
+
+    updatedSymbols = []
+
+    for symbol in symbols:
+        oldData = pd.read_csv("data/prices/{}.csv".format(symbol))
+        startDate = oldData["Date"][0]
+        oldEndDate = oldData["Date"].iloc[-1]
+        newData = yf.download(symbol, startDate, endDate)
+        newEndDate = newData.index[-1].to_pydatetime()
+        newEndDate = newEndDate.strftime("%Y-%m-%d")
+        if (newEndDate != oldEndDate):
+            newData.to_csv("data/prices/{}.csv".format(symbol))
+            updatedSymbols.append(symbol)
+        else:
+            print("{} has not updated".format(symbol))
+    
+
+    return updatedSymbols
+
 
 def get_latest_price(symbol):
     data = pd.read_csv("data/historicalPrices/{}.csv".format(symbol))
@@ -45,7 +71,9 @@ def get_latest_price(symbol):
     data.to_csv("data/historicalPrices/{}.csv".format(symbol))
     sleep(2)
 
-get_historic_data('2020-01-01','2020-12-31')
+#get_historic_data('2020-01-01','2020-12-31')
 
 # for symbol in symbols:
 #     get_latest_price(symbol)
+
+# update_price_data()
