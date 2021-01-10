@@ -4,6 +4,9 @@ import json
 from tech_analysis import *
 from data_collector import *
 
+import os
+from datetime import date 
+
 BASE_URL = "https://paper-api.alpaca.markets"
 ACCOUNT_URL = "{}/v2/account".format(BASE_URL)
 ORDERS_URL = "{}/v2/orders".format(BASE_URL)
@@ -32,6 +35,12 @@ def get_orders(symbol):
     return json.loads(r.content)
 
 
+def cancel_orders():
+
+    r = requests.delete(ORDERS_URL, headers=HEADERS)
+    return json.loads(r.content)
+
+
 def is_bought(symbol):
     response = get_orders(symbol)
     if(response != []):
@@ -39,6 +48,24 @@ def is_bought(symbol):
         if (mostRecentOrder.get("side") == "buy"):
             return True
     return False
+
+def log_data(symbol, numberOfShares, side, status):
+    new_row = {
+        "Symbol" : symbol,
+        "Date": date.today(),
+        "NumShares": numberOfShares,
+        "Side": side,
+        "Status": status
+    }
+    if not os.path.exists('trades/logs/{}_trades.csv'.format(symbol)):
+        df = pd.DataFrame(columns = ['Symbol', 'Date', 'NumShares', 'Side', 'Status'])
+    else:
+        df = pd.read_csv('trades/logs/{}_trades.csv'.format(symbol))
+    
+    df = df.append(new_row, ignore_index=True)
+    df.to_csv('trades/logs/{}_trades.csv'.format(symbol), index=False)
+    
+        
 
 def trading_bot():
 
@@ -49,6 +76,7 @@ def trading_bot():
     update news every day
     go through every updated stock and see if a buy decision is needed
     call the API if action needed
+    log date
 
     '''
     print("UPDATING PRICE INFO")
@@ -77,8 +105,12 @@ def trading_bot():
                 response = create_order(symbol, numberOfShares, side, "market", "opg")
                 if (response.get("message") == "insufficient buying power"):
                     print("insufficient buying power to buy/sell {}".format(symbol))
+                    status = "rejected"
                 else:
                     print("{} {} shares of {}".format(side, numberOfShares, symbol))
+                    status = "accepted"
+                
+                log_data(symbol, numberOfShares, side, status)
             
             
 
@@ -86,6 +118,11 @@ def trading_bot():
 #print(is_bought("AMZN"))
 
 trading_bot()
+#cancel_orders()
+
+#print(json.dumps(get_orders("TSLA"), indent=4, sort_keys=True))
+# df = pd.read_csv("trades/logs/ADI_trades.csv")
+# print(df)
 
 # update_price_data()
 #get_historic_data("2020-01-01", "2021-01-09")
