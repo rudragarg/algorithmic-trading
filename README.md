@@ -1,7 +1,7 @@
 # algorithmic-trading
 # Temporarily public for review
 
-## This is still a work of progress: need to document/clean code, push backtrading stats and charts, need to write personal report (README), troubleshoot AWS EC2
+## This is still a work of progress: need to document/clean code, push backtrading stats and charts, need to write personal report (README), debug AWS EC2
 ## To review Alpaca API, please review trader.py
 
 * Explain why I did the project  
@@ -12,4 +12,4 @@
 * explain how to run the project
 * Explain the methods that I tried
 * Explain the improvements I plan to make
-* Explain what you have learned
+* Explain what I have learned
