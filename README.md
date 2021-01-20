@@ -1,7 +1,7 @@
 # algorithmic-trading
-# Currently public for review
+# Temporarily public for review
 
-## This is still a work of progress: need to document code, push backtrading stats and charts, need to write personal report (README)
+## This is still a work of progress: need to document/clean code, push backtrading stats and charts, need to write personal report (README)
 ## To review Alpaca API, please review trader.py
 
 * Explain why I did the project  
